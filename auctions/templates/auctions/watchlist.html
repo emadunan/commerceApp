@@ -1,0 +1,26 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <h2>Watchlist:</h2>
+    <hr>
+    <div class="container">
+    {% for item in watchlist %}
+        <div class="row">
+            <div class="col-9">
+                <form action="{% url 'showlisting' item.id %}" method="post">
+                    {% csrf_token %}
+                    <h2>{{item.title}} (${{item.bidInit_val}}) <span> <button type="submit" class="btn btn-primary btn-sm">Open</button> </span></h2>
+                </form>
+                <p>{{item.description}}</p>
+            </div>
+            <div class="col-3">
+                <img src="{{item.photoUrl}}" onerror="this.onerror=null;this.src='../../../../static/auctions/no_img_available.jpg';"
+                    alt="{{auctionListing.title}}" style="padding: 1rem; width: 7rem; height: 7rem;">
+            </div>
+        </div>
+        <hr>
+    {% endfor %}
+    </div>
+
+{% endblock %}

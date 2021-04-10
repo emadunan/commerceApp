@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="container">
+    <h2>Active Listings IN {{category}}</h2>
+    {% for listing in listings %}
+    <div class="card" style="width: 18rem; display: inline-block; margin: 1rem;">
+        <img src="{{listing.photoUrl}}" class="card-img-top"
+        onerror="this.onerror=null;this.src='../../../../static/auctions/no_img_available.jpg';"
+        alt="{{listing.title}}" style="padding: 1rem; height: 17rem;">
+        <div class="card-body">
+            <h5 class="card-title">
+                <a href="{% url 'showlisting' listing.id %}">{{listing.title}}</a>
+            </h5>
+            <p class="card-text" style="height: 10rem;">{{listing.description}}</p>
+            <hr>
+            <strong style="display: block;">Price: ${{listing.bidInit_val}}</strong>
+            <small>Created: {{listing.createdAt}}</small>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+{% endblock %}

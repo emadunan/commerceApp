@@ -1,0 +1,39 @@
+{% extends "auctions/layout.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <h2>{{listing.title}} (${{listing.bidInit_val}})</h2>
+
+                {% if listedInWatchlist %}
+                <form action="{% url 'removefromwatchlist' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-secondary mb-3">Remove from watchlist</button>
+                </form>
+                {% else %}
+                <form action="{% url 'addtowatchlist' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-secondary mb-3">Add to watchlist</button>
+                </form>
+                {% endif %}
+
+
+                <p>{{listing.description}}</p>
+                <h4>Details</h4>
+                <ul>
+                    <li>Category: {{listing.category}}</li>
+                    <li>Listed By: {{listing.listedBy.username}}</li>
+                    <li>At: {{listing.createdAt}}</li>
+                </ul>
+            </div>
+            <div class="col-6">
+                <img src="{{listing.photoUrl}}" onerror="this.onerror=null;this.src='../../../../static/auctions/no_img_available.jpg';"
+                    alt="{{auctionListing.title}}" style="padding: 1rem; width: inherit;">
+            </div>
+        </div>
+        
+    </div>
+{% endblock %}
