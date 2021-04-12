@@ -10,7 +10,7 @@
             <div class="col-9">
                 <form action="{% url 'showlisting' item.id %}" method="post">
                     {% csrf_token %}
-                    <h2>{{item.title}} (${{item.bidInit_val}}) <span> <button type="submit" class="btn btn-primary btn-sm">Open</button> </span></h2>
+                    <h2>{{item.title}} <span> <button type="submit" class="btn btn-primary btn-sm">Open</button> </span></h2>
                 </form>
                 <p>{{item.description}}</p>
             </div>

@@ -18,7 +18,11 @@
             </h5>
             <p class="card-text" style="height: 10rem;">{{auctionListing.description}}</p>
             <hr>
-            <strong style="display: block;">Price: ${{auctionListing.bidInit_val}}</strong>
+            {% if auctionListing.maxPrice %}
+                <strong style="display: block;">Price: ${{auctionListing.maxPrice}}</strong>
+            {% else %}
+                <strong style="display: block;">Price: ${{auctionListing.bidInit_val}}</strong>
+            {% endif %}
             <small>Created: {{auctionListing.createdAt}}</small>
         </div>
       </div>

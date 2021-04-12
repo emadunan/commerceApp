@@ -6,7 +6,11 @@
     <div class="container">
         <div class="row">
             <div class="col-6">
-                <h2>{{listing.title}} (${{listing.bidInit_val}})</h2>
+                {% if max_price %}
+                    <h2>{{listing.title}} (${{max_price}})</h2>
+                {% else %}
+                    <h2>{{listing.title}} (${{listing.bidInit_val}})</h2>
+                {% endif %}
 
                 {% if listedInWatchlist %}
                 <form action="{% url 'removefromwatchlist' listing.id %}" method="post">
@@ -20,13 +24,74 @@
                 </form>
                 {% endif %}
 
-
                 <p>{{listing.description}}</p>
-                <h4>Details</h4>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <h4>Details</h4>
+                        <ul>
+                            <li>Category: {{listing.category}}</li>
+                            <li>Listed By: {{listing.listedBy.username}}</li>
+                            <li>At: {{listing.createdAt}}</li>
+                        </ul>
+                    </div>
+                    {% if listing.active_state == 0 %}
+                    <div class="col-md-6 col-sm-12">
+                        <div class="card">
+                            <div class="card-body bg-warning" style="padding: 0.7rem; text-align: center;">
+                              <h4>TAKEN BY</h4>
+                              <h2>{{ winner }}</h2>
+                            </div>
+                          </div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+
+                {% if listing.listedBy.username == user.username%}
+                <form action="{% url 'closeBid' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" class="form-control" name="listing_id" value="{{listing.id}}" hidden>
+                    {% if listing.active_state == 1 %}
+                    <button type="submit" class="btn btn-danger btn-block mb-1">Close The Auction!</button>
+                    {% else %}
+                    <button disabled class="btn btn-danger btn-block mb-1" >Closed!</button>
+                    {% endif %}
+                </form>
+                {% endif %}
+
+                <form action="{% url 'addBid' %}" method="post">
+                    <small style="color: #495057;"><strong>{{bids_count}} bid(s).. Take your chance, and try!</strong></small>
+                    <div class="input-group mb-3">
+                        {% if listing.active_state == 1 %}
+                            <input type="text" class="form-control" name="listing_id" value="{{listing.id}}" hidden>
+                            <input type="number" step="0.01" class="form-control" name="bid_val" placeholder="Bid">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon21">Submit</button>
+                        {% else %}
+                            <input type="number" disabled class="form-control" placeholder="Taken">
+                            <button class="btn btn-outline-secondary" disabled id="button-addon21">Submit</button>
+                        {% endif %}
+                    </div>
+                </form>
+                <hr>
+                <form action="{% url 'addComment' %}" method="post">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="listing_id" value="{{listing.id}}" hidden>
+                        <input type="text" class="form-control" name="content" placeholder="Make comment">
+                        <button class="btn btn-outline-secondary" type="submit" id="button-addon23">Post!</button>
+                        {% csrf_token %}
+                    </div>
+                    
+                </form>
+                <h6><u>Comments:</u></h6>
                 <ul>
-                    <li>Category: {{listing.category}}</li>
-                    <li>Listed By: {{listing.listedBy.username}}</li>
-                    <li>At: {{listing.createdAt}}</li>
+                    {% for comment in comments %}
+                    <li>
+                        <i>{{comment.user.username}} ({{comment.createdAt}})</i>
+                        <br>
+                        <span style="color: blue;">"{{comment.content}}"</span>
+                    </li>
+                    {% endfor %}
                 </ul>
             </div>
             <div class="col-6">
