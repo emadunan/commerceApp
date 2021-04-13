@@ -86,7 +86,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-@login_required()
+@login_required
 def create_listing(request):
     if request.method == "POST":
         form = NewListingForm(request.POST)
@@ -113,7 +113,7 @@ def create_listing(request):
         "form": NewListingForm()
     })
 
-@login_required()
+@login_required
 def show_listing(request, list_id):
     curr_user = User.objects.get(pk=request.user.id)
     listing = AuctionListing.objects.get(pk=list_id)
@@ -154,14 +154,14 @@ def show_listing(request, list_id):
         "bids_count": counter
     })
 
-@login_required()
+@login_required
 def show_categories(request):
     return render(request, "auctions/categories.html", {
         "categories": CATEGORIES
     })
 
 
-@login_required()
+@login_required
 def show_categorized_listings(request, category):
     listings = AuctionListing.objects.filter(category=category)
     return render(request, "auctions/categorized.html", {
@@ -170,7 +170,7 @@ def show_categorized_listings(request, category):
     })
 
 
-@login_required()
+@login_required
 def show_watchlist(request):
     curr_user = User.objects.get(pk=request.user.id)
     watchlist = curr_user.watchlist.all()
@@ -179,7 +179,7 @@ def show_watchlist(request):
     })
 
 
-@login_required()
+@login_required
 def add_to_watchlist(request, list_id):
     curr_user = User.objects.get(pk=request.user.id)
     listing = AuctionListing.objects.get(pk=list_id)
@@ -188,7 +188,7 @@ def add_to_watchlist(request, list_id):
     return HttpResponseRedirect(reverse("watchlist"))
 
 
-@login_required()
+@login_required
 def remove_from_watchlist(request, list_id):
     curr_user = User.objects.get(pk=request.user.id)
     listing = AuctionListing.objects.get(pk=list_id)
@@ -203,7 +203,7 @@ def remove_from_watchlist(request, list_id):
     return HttpResponseRedirect(reverse("watchlist"))
 
 
-@login_required()
+@login_required
 def add_bid(request):
     if request.method == "POST":
         bid_val = request.POST["bid_val"]
@@ -240,7 +240,7 @@ def add_bid(request):
         return HttpResponseRedirect(reverse("showlisting", args=(listing_id,)))
 
 
-@login_required()
+@login_required
 def add_comment(request):
     if request.method == "POST":
         content = request.POST["content"]
@@ -259,7 +259,7 @@ def add_comment(request):
         return HttpResponseRedirect(reverse("showlisting", args=(listing_id,)))
 
 
-@login_required()
+@login_required
 def close_bid(request):
     listing_id = request.POST["listing_id"]
 
