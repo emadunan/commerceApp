@@ -24,6 +24,18 @@ class NewListingForm(forms.Form):
 
 # VIEWS:
 def index(request):
+    auctionListings = AuctionListing.objects.filter(active_state=1)
+
+    for auctionListing in auctionListings:
+        maxPrice = Bid.objects.filter(listing=auctionListing).aggregate(Max('bid_val'))
+        auctionListing.maxPrice = (maxPrice['bid_val__max'])
+
+    return render(request, "auctions/index.html", {
+        "auctionListings": auctionListings
+    })
+
+
+def all(request):
     auctionListings = AuctionListing.objects.all()
 
     for auctionListing in auctionListings:

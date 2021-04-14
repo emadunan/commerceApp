@@ -1,0 +1,31 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="container">
+    <h2>Active Listings</h2>
+    {% for auctionListing in auctionListings %}
+    <div class="card" style="width: 18rem; display: inline-block; margin: 1rem;">
+        <img src="{{auctionListing.photoUrl}}" class="card-img-top"
+        onerror="this.onerror=null;this.src='../../../../static/auctions/no_img_available.jpg';"
+        alt="{{auctionListing.title}}" style="padding: 1rem; height: 17rem;">
+        <div class="card-body">
+            <h5 class="card-title">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'showlisting' auctionListing.id %}">{{auctionListing.title}}</a>
+                {% else %}
+                    <h5 style="color: #007bff;">{{auctionListing.title}}</h5>
+                {% endif %}
+            </h5>
+            <p class="card-text" style="height: 10rem;">{{auctionListing.description}}</p>
+            <hr>
+            {% if auctionListing.maxPrice %}
+                <strong style="display: block;">Price: ${{auctionListing.maxPrice}}</strong>
+            {% else %}
+                <strong style="display: block;">Price: ${{auctionListing.bidInit_val}}</strong>
+            {% endif %}
+            <small>Created: {{auctionListing.createdAt}}</small>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+{% endblock %}
